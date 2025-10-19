@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+  <meta name="author" content="Sangjun Noh">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style type="text/css">
+    hr { border: 0; height: 0; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(255,255,255,0.3); }
+    img { border-radius: 5%; }
+    a { color: #1772d0; text-decoration: none; }
+    a:focus, a:hover { color: #f09228; text-decoration: none; }
+    body, td, th, tr, p, a { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 14px }
+    strong { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 14px; }
+    heading { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 30px; }
+    papertitle { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 14px; font-weight: 700; }
+    name { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 30px; }
+    datetime { color: #cc0033; display: inline; font-family: 'GameBoy', monospace; letter-spacing: 1px; -webkit-text-stroke: 0.5px; transition: all 0.5s ease; text-shadow: 1px 1px #c67287; }
+    .zero { width: 160px; height: 80px; position: relative; }
+    .one { width: 160px; height: 160px; position: relative; }
+    .two { width: 160px; height: 160px; position: absolute; transition: opacity .2s ease-in-out; -moz-transition: opacity .2s ease-in-out; -webkit-transition: opacity .2s ease-in-out; }
+    .fade { transition: opacity .2s ease-in-out; -moz-transition: opacity .2s ease-in-out; -webkit-transition: opacity .2s ease-in-out; }
+    mid { font-size: 40px; position:relative; top:2px; }
+    span.highlight { background-color: #ffffd0; }
+    #summary:hover + #detail, #detail:hover { display: block; }
+    #detail { display: none; }
+    details summary > * { display: inline; }
+    summary a * { pointer-events: none; }
+    details summary::-webkit-details-marker { display:none; }
+    @font-face { font-family: 'GameBoy'; src: url('fonts/Early-GameBoy.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+    .gameboy-font { font-family: 'GameBoy', monospace; letter-spacing: 2px; font-weight: 100; -webkit-text-stroke: 0.5px; transition: all 0.5s ease; }
+    .gameboy-classic { color: #0f380f; text-shadow: 1px 1px #8bac0f; }
+    .gameboy-color { background: linear-gradient(45deg, #990000, #994000, #998100, #006400, #000099, #1a0033, #3a006b); -webkit-background-clip: text; background-clip: text; color: transparent; animation: rainbow 3s ease infinite; text-shadow: none; }
+    @keyframes rainbow { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+    .tiny-text { font-size: 8px; }
+    /* teaser video styling */
+  .teaser { width: 320px; aspect-ratio: 12.47 / 7; object-fit: cover; border-radius: 6px; }
+  @media (max-width: 640px) { .teaser { width: 100%; } }
+  </style>
+  <link rel="icon" href="misc/s_favicon.png">
+  <title>Sangjun Noh</title>
+</head>
+<body>
+
+  <table style="width:100%;max-width:900px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:0px">
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:70%;vertical-align:middle">
+              <p align="center">
+                <name>Sangjun Noh</name>
+                <div id="root" align="center"></div>
+                <script type="text/babel">
+                  const EmailScrambler = () => {
+                    const [isScrambled, setIsScrambled] = React.useState(true);
+                    const [displayUsername, setDisplayUsername] = React.useState('');
+                    const emailUser = 'sangjun7';
+                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    const generateRandomString = (length) => Array.from(Array(length), () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+                    React.useEffect(() => {
+                      if (isScrambled) { setDisplayUsername(generateRandomString(emailUser.length)); }
+                      else {
+                        let i = 0;
+                        const animate = () => {
+                          if (i <= emailUser.length) { const unscr = emailUser.slice(0,i); const scr = generateRandomString(emailUser.length - i); setDisplayUsername(unscr + scr); i++; setTimeout(animate, 50);} }
+                        animate();
+                      }
+                    }, [isScrambled]);
+                    return (
+                      <div className="text-center">
+                        <div className={`cursor-pointer select-none gameboy-font ${isScrambled ? 'gameboy-classic' : 'gameboy-color'}`} onClick={() => setIsScrambled(!isScrambled)}>
+                          <span>{displayUsername}<span style={{color: isScrambled ? '#cc0033' : '#ff0000'}}> [at] </span>gmail<span style={{color: isScrambled ? '#cc0033' : '#ff0000'}}> [dot] </span>com</span>
+                        </div>
+                        <div style={{ height: '5px' }}></div>
+                        {isScrambled && (<div className="tiny-text text-gray-400 mt-2">(click to unscramble)</div>)}
+                      </div>
+                    );
+                  };
+                  const root = ReactDOM.createRoot(document.getElementById('root')); root.render(<EmailScrambler />);
+                </script>
+
+              <p style="text-align:justify">
+                I'm a Ph.D. candidate in the Robotics Intelligence Program at <a href="https://www.gist.ac.kr/" target="_blank">GIST</a> advised by Prof. <a href="https://sailab.gist.ac.kr/" target="_blank">Kyoobin Lee</a>. My research focuses on scaling robotic manipulation via sim-to-real, web-scale data, and foundation models, learning from teleoperation and internet videos to approach human-level manipulation.
+              </p>
+
+              <p align=center>
+                <strong>
+                <a href="misc/CV_SangjunNoh.pdf" target="_blank">CV</a> &nbsp/&nbsp
+                <a href="https://scholar.google.com/citations?user=tqylaI8AAAAJ&hl=en" target="_blank">Scholar</a> &nbsp/&nbsp
+                <a href="https://github.com/dinnno" target="_blank">Github</a>
+                </strong>
+              </p>
+
+              <p align=center>
+                <span style="font-size:0.9em; color:#696969;">Seoul / Gwangju, South Korea</span>
+              </p>
+            </td>
+            <td style="padding:2.5%;width:30%;max-width:30%">
+              <img style="width:100%;max-width:100%;object-fit: cover; border-radius: 10%;" alt="profile photo" src="misc/sangjun-headshot.jpg">
+            </td>
+          </tr>
+        </tbody></table>
+        <hr>
+
+        <h1>Updates</h1>
+        <table style="width:100%;margin-right:auto;margin-left:auto;" cellspacing="6">
+          <colgroup>
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 85%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <td><datetime>[Jul '25]&nbsp;</datetime></td>
+              <td>Teaching Assistant, AI & Robotics Summer School 2025 (KRS).</td>
+            </tr>
+            <tr>
+              <td><datetime>[May '25]&nbsp;</datetime></td>
+              <td><b>GraspSAM</b> accepted to <i>ICRA 2025</i> (poster).</td>
+            </tr>
+            <tr>
+              <td><datetime>[2023]&nbsp;</datetime></td>
+              <td>Gold Prize, 29th Samsung Humantech Paper Award.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr>
+        <div style="height:20px;font-size:1px;">&nbsp;</div>
+
+        <!-- Research -->
+        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+          <tr><td width="100%" valign="middle"><h1>Research</h1></td></tr>
+        </table>
+        <p style="color:#666;font-style:italic;margin:6px 10px 0;">모든 publication은 Google Scholar를 참고해주세요: <a href="https://scholar.google.com/citations?user=tqylaI8AAAAJ&hl=en" target="_blank">Google Scholar</a></p>
+
+        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="10">
+
+          <!-- 1) 3D Flow Diffusion Policy -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/3dfdp/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>3D Flow Diffusion Policy</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>Preprint</em></font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/3dfdp/paper.pdf" target="_blank">paper</a> /
+                <a href="publications/3dfdp/index.html" target="_blank"><b>website</b></a> /
+                <a href="publications/3dfdp/code.html" target="_blank">code</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Visuomotor policy learning via generating flow in 3D space.</div>
+            </td>
+          </tr>
+
+          <!-- 2) ManipForce -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/manipforce/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>ManipForce: Force-Guided Policy Learning with Frequency-Aware Representation for Contact-Rich Manipulation</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>Preprint</em></font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/manipforce/paper.pdf" target="_blank">paper</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 3) BiGraspFormer -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/bigraspformer/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>BiGraspFormer: End-to-End Bimanual Grasp Transformer</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>Preprint</em></font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/bigraspformer/paper.pdf" target="_blank">paper</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 4) GraspClutter6D (RA-L) -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/graspclutter6d/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>GraspClutter6D: A Large-Scale Dataset for Robotic Grasping and Perception in Clutter</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                Seunghyeok Back, Joosoon Lee, Kangmin Kim, Heeseon Rho, Geonhyup Lee, Raeyoung Kang, Sangbeom Lee, <u>Sangjun Noh</u>, and Kyoobin Lee
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>IEEE Robotics and Automation Letters (RA-L)</em></font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/graspclutter6d/paper.pdf" target="_blank">paper</a> /
+                <a href="publications/graspclutter6d/index.html" target="_blank">website</a> /
+                <a href="publications/graspclutter6d/code.html" target="_blank">code</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Benchmarking grasping & perception in cluttered scenes.</div>
+            </td>
+          </tr>
+
+          <!-- 5) GraspSAM (ICRA 2025) -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/graspsam/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>GraspSAM: When Segment Anything Model meets Grasp Detection</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <u>Sangjun Noh</u>, Jongwon Kim, Dongwoo Nam, Seunghyeok Back, Raeyoung Kang, and Kyoobin Lee
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>IEEE International Conference on Robotics and Automation (ICRA)</em>, 2025 — Poster</font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/graspsam/paper.pdf" target="_blank">paper</a> /
+                <a href="publications/graspsam/index.html" target="_blank"><b>website</b></a> /
+                <a href="https://github.com/dinnno/GraspSAM" target="_blank">code</a> /
+                <a href="publications/graspsam/video.mp4" target="_blank">video</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Segment Anything + grasping for scalable label-free grasp proposal generation.</div>
+            </td>
+          </tr>
+
+          <!-- 6) CVPR 2024 TTA -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/tta-cvpr24/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>Domain-Specific Block Selection and Paired-View Pseudo-Labeling for Online Test-Time Adaptation</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                Yeonguk Yu, Sungho Shin, Seunghyeok Back, Minhwan Ko, <u>Sangjun Noh</u>, and Kyoobin Lee
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>CVPR</em>, 2024 — Poster</font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/tta-cvpr24/paper.pdf" target="_blank">paper</a> /
+                <a href="publications/tta-cvpr24/code.html" target="_blank">code</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Online TTA with block selection + paired-view pseudo labels.</div>
+            </td>
+          </tr>
+
+          <!-- 7) RA-L Learning to Place Unseen Objects -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/place-ral/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>Learning to Place Unseen Objects Stably Using a Large-Scale Simulation</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <u>Sangjun Noh*</u>, Raeyoung Kang*, Taewon Kim*, Seunghyeok Back, Seongho Bak, and Kyoobin Lee
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>IEEE Robotics and Automation Letters (RA-L)</em> — Gold Prize, 29th Samsung Humantech Paper Award</font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/place-ral/paper.pdf" target="_blank">paper</a> /
+                <a href="publications/place-ral/index.html" target="_blank">website</a> /
+                <a href="publications/place-ral/code.html" target="_blank">code</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Stable placement policy learning at scale via simulation.</div>
+            </td>
+          </tr>
+
+          <!-- 8) IROS 2024 PolyFit -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/polyfit-iros24/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>PolyFit: A Peg-in-hole Assembly Framework for Unseen Polygon Shapes via Sim-to-real Adaptation</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                Geonhyup Lee*, Joosoon Lee*, <u>Sangjun Noh</u>, Minhwan Ko, Kangmin Kim, and Kyoobin Lee
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>IROS</em>, 2024</font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/polyfit-iros24/paper.pdf" target="_blank">paper</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Sim2Real peg-in-hole for unseen polygonal shapes.</div>
+            </td>
+          </tr>
+
+          <!-- 9) ICRA 2022 Amodal -->
+          <tr>
+            <td width="25%" align="center">
+              <video class="teaser" playsinline autoplay muted loop>
+              <source src='publications/amodal-icra22/video/teaser.mp4' type='video/mp4'>
+            </video>
+            </td>
+            <td valign="center" width="70%">
+              <div id="summary">
+                <papertitle>Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling</papertitle>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                Seunghyeok Back, Joosoon Lee, Taewon Kim, <u>Sangjun Noh</u>, Raeyoung Kang, Seongho Bak, and Kyoobin Lee
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <font color=#696969><em>ICRA</em>, 2022</font>
+                <div style="height:5px;font-size:1px;">&nbsp;</div>
+                <a href="publications/amodal-icra22/paper.pdf" target="_blank">paper</a> /
+                <a href="publications/amodal-icra22/index.html" target="_blank">website</a> /
+                <a href="publications/amodal-icra22/code.html" target="_blank">code</a> /
+                <a href="publications/amodal-icra22/video.mp4" target="_blank">video</a>
+                <div style="height:15px;font-size:1px;">&nbsp;</div>
+              </div>
+              <div id="detail">Amodal instance segmentation with explicit occlusion reasoning.</div>
+            </td>
+          </tr>
+
+        </table>
+
+        <div style="height:20px;font-size:1px;">&nbsp;</div>
+        <hr>
+        <br>
+        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="10">
+          <tr><td>
+            <p align="right"><font size="2" color=#696969>
+              <a href="http://www.cs.berkeley.edu/~barron/" target="_blank"><font size="2">Imitation is the highest form of flattery</font></a>
+            </font></p>
+          </td></tr>
+        </table>
+
+      </td>
+    </tr>
+  </tbody></table>
+
+</body>
+</html>
