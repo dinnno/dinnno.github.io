@@ -19,7 +19,7 @@
     heading { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 30px; }
     papertitle { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 14px; font-weight: 700; }
     name { font-family: 'Lato', Verdana, Helvetica, sans-serif; font-size: 30px; }
-    datetime { color: #cc0033; display: inline; font-family: 'GameBoy', monospace; letter-spacing: 1px; -webkit-text-stroke: 0.5px; transition: all 0.5s ease; text-shadow: 1px 1px #c67287; }
+    datetime { color: inherit; display: inline; font-family: inherit; letter-spacing: 0; -webkit-text-stroke: 0; text-shadow: none; font-weight: normal; }
     .zero { width: 160px; height: 80px; position: relative; }
     .one { width: 160px; height: 160px; position: relative; }
     .two { width: 160px; height: 160px; position: absolute; transition: opacity .2s ease-in-out; -moz-transition: opacity .2s ease-in-out; -webkit-transition: opacity .2s ease-in-out; }
@@ -91,12 +91,13 @@
               </p>
 
               <p align=center>
-                <strong>
-                <a href="misc/CV_SangjunNoh.pdf" target="_blank">CV</a> &nbsp/&nbsp
-                <a href="https://scholar.google.com/citations?user=tqylaI8AAAAJ&hl=en" target="_blank">Scholar</a> &nbsp/&nbsp
-                <a href="https://github.com/dinnno" target="_blank">Github</a>
-                </strong>
-              </p>
+  <strong>
+    <a href="mailto:sjnoh1234@gmail.com,sangjun7@gm.gist.ac.kr">Email</a> &nbsp/&nbsp
+    <a href="misc/CV_SangjunNoh.pdf" target="_blank">CV</a> &nbsp/&nbsp
+    <a href="https://scholar.google.com/citations?user=tqylaI8AAAAJ&hl=en" target="_blank">Scholar</a> &nbsp/&nbsp
+    <a href="https://github.com/dinnno" target="_blank">Github</a>
+  </strong>
+</p>
 
               <p align=center>
                 <span style="font-size:0.9em; color:#696969;">Seoul / Gwangju, South Korea</span>
@@ -107,10 +108,39 @@
             </td>
           </tr>
         </tbody></table>
-        <hr>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const table = document.querySelector('#updates-table tbody');
+    if (!table) return;
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const KEEP = 5;
+    if (rows.length > KEEP) {
+      const details = document.createElement('details');
+      const summary = document.createElement('summary');
+      summary.innerHTML = '<em><b>More updates</b></em>';
+      details.appendChild(summary);
+
+      const wrap = document.createElement('table');
+      wrap.setAttribute('cellspacing','6');
+      wrap.style.width = '100%';
+      const colgroup = document.createElement('colgroup');
+      colgroup.innerHTML = '<col span="1" style="width: 15%;"><col span="1" style="width: 85%;">';
+      wrap.appendChild(colgroup);
+      const tb = document.createElement('tbody');
+      rows.slice(KEEP).forEach(r => tb.appendChild(r));
+      wrap.appendChild(tb);
+      details.appendChild(wrap);
+
+      // place details after the original updates table
+      const updatesTable = document.getElementById('updates-table');
+      updatesTable.parentElement.insertBefore(details, updatesTable.nextSibling);
+    }
+  });
+</script>
+<hr>
 
         <h1>Updates</h1>
-        <table style="width:100%;margin-right:auto;margin-left:auto;" cellspacing="6">
+        <table id="updates-table" style="width:100%;margin-right:auto;margin-left:auto;" cellspacing="6">
           <colgroup>
             <col span="1" style="width: 15%;">
             <col span="1" style="width: 85%;">
